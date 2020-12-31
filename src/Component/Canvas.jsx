@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import santa from "./img/santa1.jpg";
+import santa from "../img/santa1.jpg";
 const Canvas = () => {
   const canvasRef = useRef(null);
   const imageRef = useRef(null);
@@ -14,7 +14,20 @@ const Canvas = () => {
     };
   }, []);
 
-  function wrapText(context, text, x, y, maxWidth, lineHeight) {
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const context = canvas.getContext("2d");
+
+    var maxWidth = 100;
+    var lineHeight = 40;
+    var x = 40;
+    var y = 320;
+    context.font = "40px Courier";
+    context.direction = "inherit";
+    wrapText(context, text, x, y, maxWidth, lineHeight);
+  }, [text]);
+
+  const wrapText = (context, text, x, y, maxWidth, lineHeight) => {
     text = text.substr(0, 32);
 
     let words = [];
@@ -43,20 +56,7 @@ const Canvas = () => {
       }
     }
     context.fillText(line, x, y);
-  }
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const context = canvas.getContext("2d");
-
-    var maxWidth = 100;
-    var lineHeight = 40;
-    var x = 40;
-    var y = 320;
-    context.font = "40px Courier";
-    context.direction = "inherit";
-    wrapText(context, text, x, y, maxWidth, lineHeight);
-  }, [text]);
+  };
 
   const handleDownload = () => {
     const canvas = canvasRef.current;
@@ -66,6 +66,7 @@ const Canvas = () => {
     link.href = canvas.toDataURL();
     link.click();
   };
+
   return (
     <div className="container">
       <div className="row">
